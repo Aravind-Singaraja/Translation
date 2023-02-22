@@ -1,0 +1,97 @@
+The program starts by reading the input text file using a BufferedReader:
+
+java
+Copy code
+String inputFilePath = "path/to/input/file.txt";
+try (BufferedReader inputReader = new BufferedReader(new FileReader(inputFilePath))) {
+    // code for processing the input file goes here
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+
+The try block with resources is used to ensure that the input file is properly closed after reading.
+
+Next, the program reads the find words list file using another BufferedReader:
+
+java
+Copy code
+String findWordsFilePath = "path/to/find/words/list.txt";
+Set<String> findWordsList = new HashSet<>();
+try (BufferedReader findWordsReader = new BufferedReader(new FileReader(findWordsFilePath))) {
+    String line;
+    while ((line = findWordsReader.readLine()) != null) {
+        findWordsList.add(line.trim().toLowerCase());
+    }
+}
+The code reads each line from the file and adds it to a Set after trimming and converting to lowercase.
+
+
+
+The program then reads the dictionary file using yet another BufferedReader:
+
+java
+Copy code
+String dictionaryFilePath = "path/to/dictionary/file.csv";
+Map<String, String> dictionary = new HashMap<>();
+try (BufferedReader dictReader = new BufferedReader(new FileReader(dictionaryFilePath))) {
+    String line;
+    while ((line = dictReader.readLine()) != null) {
+        String[] parts = line.split(",");
+        dictionary.put(parts[0].trim().toLowerCase(), parts[1].trim());
+    }
+}
+
+The code splits each line of the file using a comma delimiter, and adds the English word as the key and the French word as the value to a Map. Again, the key is converted to lowercase.
+
+
+
+The program then processes each line of the input file using a BufferedWriter to write the output to a new file:
+
+java
+Copy code
+String outputFilePath = "path/to/output/file.txt";
+try (BufferedWriter outputWriter = new BufferedWriter(new FileWriter(outputFilePath, true))) {
+    String line;
+    while ((line = inputReader.readLine()) != null) {
+        // code for processing each line of the input file goes here
+        outputWriter.write(newLine);
+        outputWriter.newLine();
+    }
+}
+The true parameter in the FileWriter constructor is used to indicate that the output file should be appended to, rather than overwritten.
+
+
+Within the while loop that processes each line of the input file, the program splits the line into individual words using the split() method:
+java
+Copy code
+String[] words = line.split("\\s+");
+The regular expression \s+ is used to split the line on any whitespace character.
+
+
+The program then loops through each word in the line, checks whether it is in the find words list, and replaces it with the corresponding French word from the dictionary if it is:
+java
+Copy code
+for (int i = 0; i < words.length; i++) {
+    String word = words[i].toLowerCase();
+    if (findWordsList.contains(word)) {
+        String frenchWord = dictionary.get(word);
+        if (frenchWord != null) {
+            words[i] = frenchWord;
+            // code for keeping track of replaced words and counts goes here
+        }
+    }
+}
+
+
+The program keeps track of the unique words that were replaced using a Set:
+java
+
+Copy code
+Set<String> replacedWords = new HashSet<>();
+Each time a word is replaced, it is added to the set:
+
+java
+Copy code
+replacedWords.add(word);
+The program keeps track of the number of times each
